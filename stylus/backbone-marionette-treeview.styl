@@ -9,12 +9,33 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-TreeView = Marionette.CollectionView.extend({
-  itemView: views.NodeView,
-  tagName: "ul",
-  className: "tree-view-root",
+ul.tree-view-root,
+.tree-view-node > ul
+  list-style none
+  margin 0
+  padding 0
+  position relative
+  left 20px
+  padding-top 5px
+  li
+    margin-bottom 5px
+  label
+    display inline-block
+    vertical-align bottom
+    margin-bottom 0
+    line-height 12px
+    color black
+  input[type=checkbox]
+    vertical-align bottom
+  span
+    vertical-align bottom
+    position relative
+    top 3px
 
-  expand: function() { this.children.each(function(child) { child.expand(); }); },
-  collapse: function() { this.children.each(function(child) { child.collapse(); }); },
-  toggleView: function() { this.children.each(function(child) { child.toggleView(); }); }
-});
+ul.tree-view-root
+  .tree-view-node > ul
+    display none
+  .tree-view-node.open > ul
+    display block
+  .tree-view-leaf
+    margin-left 23px

@@ -1,3 +1,14 @@
+/*
+
+Copyright (C) 2013 Acquisio Inc. V0.1.1
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
 var templateNode = '\
   <a>\
     <%=(hasChildren ? "<span class=\"tree-view-chevron\">&#9658</span>" : "")%>\
@@ -24,7 +35,11 @@ NodeView = Marionette.CompositeView.extend({
 
   initialize: function() {
     this.collection = this.model.get("children");
-    this.model.hasChildren() ? this.$el.addClass("tree-view-branch") : this.$el.addClass("tree-view-leaf") ;
+
+    if (this.model.hasChildren())
+      this.$el.addClass("tree-view-branch");
+    else
+      this.$el.addClass("tree-view-leaf") ;
 
     // Bubble change
     this.collection.on("checked", this.triggerChange, this);
@@ -39,7 +54,7 @@ NodeView = Marionette.CompositeView.extend({
     if (this.model.get("isChecked")) this.triggerChange();
   },
 
-  appendHtml: function(collectionView, itemView, index){
+  appendHtml: function(collectionView, itemView){
     collectionView.ui.list.append(itemView.el);
   },
 
@@ -80,7 +95,7 @@ NodeView = Marionette.CompositeView.extend({
     return false;
   },
 
-  toggleView: function(event) {
+  toggleView: function() {
     this.$el.toggleClass("open");
     this.switchChevron();
     return false;

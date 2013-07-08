@@ -1,0 +1,29 @@
+{
+  "name": "backbone-marionette-treeview",
+  "version": "0.1.0",
+  "description": "Provide a tree view using Backbone Marionette + Backbone",
+  "main": "js/backbone-marionette-treeview.js",
+  "directory": {
+    "example": "example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Acquisio/backbone-marionette-treeview"
+  },
+  "author": "Acquisio Inc.",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "underscore": "*",
+    "stylus": "*",
+    "grunt": "~0.4.1",
+    "grunt-mincer": "~0.3.2",
+    "grunt-contrib-stylus": "~0.5.1",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-qunit": "~0.2.2",
+    "grunt-contrib-watch": "~0.2.0",
+    "grunt-contrib-cssmin": "~0.4.1",
+    "grunt-contrib-clean": "~0.4.0"
+  }
+}
