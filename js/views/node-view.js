@@ -13,7 +13,7 @@ var templateNode = '\
   <a>\
     <%=(hasChildren ? "<span class=tree-view-chevron>&#9658</span>" : "")%>\
     <input id="<%=autoId%>"type="checkbox" <%=(isChecked ? "checked" : "")%> class="tree-view-checkbox" data-id="<%=id%>"/>\
-    <label for="<%=autoId%>" class="tree-view-label"><%=label%></label>\
+    <label for="<%=autoId%>" class="tree-view-label"><span class="tree-view-icon"></span><%=label%></label>\
   </a>\
   <ul class="tree-view-list">\
   </ul>\
@@ -30,7 +30,8 @@ NodeView = Marionette.CompositeView.extend({
     chevron: ".tree-view-chevron",
     label: ".tree-view-label",
     checkbox: ".tree-view-checkbox",
-    list: ".tree-view-list"
+    list: ".tree-view-list",
+    icon: ".tree-view-icon"
   },
 
   initialize: function(options) {
@@ -53,6 +54,7 @@ NodeView = Marionette.CompositeView.extend({
 
   onRender: function() {
     if (this.model.get("isChecked")) this.triggerChange();
+    if (this.model.get("class")) this.ui.icon.addClass(this.model.get("class"));
   },
 
   appendHtml: function(collectionView, itemView){
