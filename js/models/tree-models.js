@@ -19,6 +19,10 @@ TreeCollection = Backbone.Collection.extend({
 
   getNbChildrenChecked: function() {
     return this.getChildrenChecked().length;
+  },
+
+  toggleFromIds: function(ids, isChecked) {
+    this.each(function(child) { child.toggleFromIds(ids, isChecked); });
   }
 
 });
@@ -32,6 +36,11 @@ TreeModel = Backbone.Model.extend({
 
   initialize: function() {
     if (!this.get("children")) this.set("children", new TreeCollection());
+  },
+
+  toggleFromIds: function(ids, isChecked) {
+    if (_.contains(ids, this.id)) this.set("isChecked", isChecked);
+    this.get("children").each(function(child) { child.toggleFromIds(ids, isChecked); });
   },
 
   // Helpers

@@ -49,6 +49,18 @@ test("toggleCheck to true when model is checked and has no children", function()
   equal(treeModel.get("isChecked"), true, "Not checked");
 });
 
+test("toggleFromIds to false when model is checked and has no children", function() {
+  var treeModel = new TreeModel({ label: "test", id: "1", isChecked: 1});
+  treeModel.toggleFromIds(["1"], false);
+  equal(treeModel.get("isChecked"), false, "Not checked");
+});
+
+test("toggleFromIds to true when model is checked and has no children", function() {
+  var treeModel = new TreeModel({ label: "test", id: "1", isChecked: false});
+  treeModel.toggleFromIds(["1"], true);
+  equal(treeModel.get("isChecked"), true, "Not checked");
+});
+
 // ---------------------------
 // Empty TreeCollection
 // ---------------------------
@@ -158,6 +170,28 @@ test("toggleCheck to true when model is checked and has no children", function()
   var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
   treeModel.toggleCheck(true);
   equal(treeModel.getNbChildrenChecked(), 3, "All children checked");
+});
+
+test("toggleFromIds to false when model has children", function() {
+  var treeModels = new TreeCollection([
+    new TreeModel({ label: "test", id: "2", isChecked: true}),
+    new TreeModel({ label: "test", id: "3", isChecked: true}),
+    new TreeModel({ label: "test", id: "5", isChecked: true})
+  ]);
+  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
+  treeModel.toggleFromIds(["5"], false);
+  equal(treeModel.getNbChildrenChecked(), 2, "Two checked");
+});
+
+test("toggleFromIds to true when model has children", function() {
+  var treeModels = new TreeCollection([
+    new TreeModel({ label: "test", id: "2"}),
+    new TreeModel({ label: "test", id: "3"}),
+    new TreeModel({ label: "test", id: "5"})
+  ]);
+  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
+  treeModel.toggleFromIds(["2", "3"], true);
+  equal(treeModel.getNbChildrenChecked(), 2, "Two checked");
 });
 
 // ---------------------------

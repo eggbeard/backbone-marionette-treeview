@@ -31,7 +31,7 @@ module.exports = function(grunt) {
         }
       },
       js: {
-        files: ['js/**/*.js', '!lib/js/backbone-marionette-treeview.js', '!node_modules/**/*.js'],
+        files: ['js/**/*.js', '!lib/**/*.js', '!node_modules/**/*.js'],
         tasks: ['jshint', 'mince:dev'],
         options: {
           debounceDelay: 250
