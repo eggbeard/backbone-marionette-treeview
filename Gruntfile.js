@@ -87,8 +87,8 @@ module.exports = function(grunt) {
     qunit: {
       all: {
         options: {
-          all: [
-            '/test/index.html'
+          urls: [
+            'http://localhost:8000/test/index.html'
           ]
         }
       }
