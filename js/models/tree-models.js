@@ -9,7 +9,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-TreeCollection = Backbone.Collection.extend({
+Trees = Backbone.Collection.extend({
   getChildrenChecked: function() {
     var modelsChecked = this.map(function(model) {
       return model.getChildrenChecked();
@@ -27,7 +27,7 @@ TreeCollection = Backbone.Collection.extend({
 
 });
 
-TreeModel = Backbone.Model.extend({
+Tree = Backbone.Model.extend({
   defaults: {
     id: 0,
     label: "Default",
@@ -35,7 +35,7 @@ TreeModel = Backbone.Model.extend({
   },
 
   initialize: function() {
-    if (!this.get("children")) this.set("children", new TreeCollection());
+    if (!this.get("children")) this.set("children", new Trees());
   },
 
   toggleFromIds: function(ids, isChecked) {
@@ -101,4 +101,4 @@ TreeModel = Backbone.Model.extend({
 });
 
 // Define model for treeViews
-TreeCollection.model = TreeModel;
+Trees.model = Tree;

@@ -1,217 +1,217 @@
 // ---------------------------
-// TreeModel without children
+// Tree without children
 // ---------------------------
 test("getNbChildren when model has no children", function() {
-  var treeModel = new TreeModel({ label: "test", id: "1"});
-  equal(treeModel.getNbTotalChildren(), 1, "No children so it's itself a child");
+  var tree = new Tree({ label: "test", id: "1"});
+  equal(tree.getNbTotalChildren(), 1, "No children so it's itself a child");
 });
 
 test("getNbChildrenChecked when model has no children checked", function() {
-  var treeModel = new TreeModel({ label: "test", id: "1"});
-  equal(treeModel.getNbChildrenChecked(), 0, "No children checked");
+  var tree = new Tree({ label: "test", id: "1"});
+  equal(tree.getNbChildrenChecked(), 0, "No children checked");
 });
 
 test("getNbChildrenChecked when model is checked and has no children", function() {
-  var treeModel = new TreeModel({ label: "test", id: "1", isChecked: 1});
-  equal(treeModel.getNbChildrenChecked(), 1, "One child checked");
+  var tree = new Tree({ label: "test", id: "1", isChecked: 1});
+  equal(tree.getNbChildrenChecked(), 1, "One child checked");
 });
 
 test("getChildrenChecked when model is checked and has no children", function() {
-  var treeModel = new TreeModel({ label: "test", id: "1", isChecked: 1});
-  equal(treeModel.getChildrenChecked().length, 1, "One child checked");
-  equal(treeModel.getChildrenChecked()[0].get("id"), treeModel.get("id"), "One child checked");
+  var tree = new Tree({ label: "test", id: "1", isChecked: 1});
+  equal(tree.getChildrenChecked().length, 1, "One child checked");
+  equal(tree.getChildrenChecked()[0].get("id"), tree.get("id"), "One child checked");
 });
 
 test("getChildrenChecked when model is not checked and has no children", function() {
-  var treeModel = new TreeModel({ label: "test", id: "1", isChecked: false});
-  equal(treeModel.getChildrenChecked().length, 0, "One child checked");
+  var tree = new Tree({ label: "test", id: "1", isChecked: false});
+  equal(tree.getChildrenChecked().length, 0, "One child checked");
 });
 
 test("allChildrenChecked when model is checked and has no children", function() {
-  var treeModel = new TreeModel({ label: "test", id: "1", isChecked: 1});
-  equal(treeModel.allChildrenChecked(), 1, "One child checked");
+  var tree = new Tree({ label: "test", id: "1", isChecked: 1});
+  equal(tree.allChildrenChecked(), 1, "One child checked");
 });
 
 test("hasChildren when model is checked and has no children", function() {
-  var treeModel = new TreeModel({ label: "test", id: "1", isChecked: 1});
-  equal(treeModel.hasChildren(), false, "No children");
+  var tree = new Tree({ label: "test", id: "1", isChecked: 1});
+  equal(tree.hasChildren(), false, "No children");
 });
 
 test("toggleCheck to false when model is checked and has no children", function() {
-  var treeModel = new TreeModel({ label: "test", id: "1"});
-  treeModel.toggleCheck(false);
-  equal(treeModel.get("isChecked"), false, "Not checked");
+  var tree = new Tree({ label: "test", id: "1"});
+  tree.toggleCheck(false);
+  equal(tree.get("isChecked"), false, "Not checked");
 });
 
 test("toggleCheck to true when model is checked and has no children", function() {
-  var treeModel = new TreeModel({ label: "test", id: "1", isChecked: 1});
-  treeModel.toggleCheck(true);
-  equal(treeModel.get("isChecked"), true, "Not checked");
+  var tree = new Tree({ label: "test", id: "1", isChecked: 1});
+  tree.toggleCheck(true);
+  equal(tree.get("isChecked"), true, "Not checked");
 });
 
 test("toggleFromIds to false when model is checked and has no children", function() {
-  var treeModel = new TreeModel({ label: "test", id: "1", isChecked: 1});
-  treeModel.toggleFromIds(["1"], false);
-  equal(treeModel.get("isChecked"), false, "Not checked");
+  var tree = new Tree({ label: "test", id: "1", isChecked: 1});
+  tree.toggleFromIds(["1"], false);
+  equal(tree.get("isChecked"), false, "Not checked");
 });
 
 test("toggleFromIds to true when model is checked and has no children", function() {
-  var treeModel = new TreeModel({ label: "test", id: "1", isChecked: false});
-  treeModel.toggleFromIds(["1"], true);
-  equal(treeModel.get("isChecked"), true, "Not checked");
+  var tree = new Tree({ label: "test", id: "1", isChecked: false});
+  tree.toggleFromIds(["1"], true);
+  equal(tree.get("isChecked"), true, "Not checked");
 });
 
 // ---------------------------
-// Empty TreeCollection
+// Empty Trees
 // ---------------------------
 
 test("getChildrenChecked when collection is empty", function() {
-  var treeCollection = new TreeCollection();
-  equal(treeCollection.getChildrenChecked().length, 0, "Empty array");
+  var trees = new Trees();
+  equal(trees.getChildrenChecked().length, 0, "Empty array");
 });
 
 test("getNbChildrenChecked when collection is empty", function() {
-  var treeCollection = new TreeCollection();
-  equal(treeCollection.getNbChildrenChecked(), 0, "No children checked because collection has no models");
+  var trees = new Trees();
+  equal(trees.getNbChildrenChecked(), 0, "No children checked because collection has no models");
 });
 
 // ---------------------------
-// TreeModel with children
+// Tree with children
 // ---------------------------
 test("getNbChildren when model has children", function() {
-  var treeModels = new TreeCollection([
-    new TreeModel({ label: "test", id: "2"}),
-    new TreeModel({ label: "test", id: "3"}),
-    new TreeModel({ label: "test", id: "5"})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2"}),
+    new Tree({ label: "test", id: "3"}),
+    new Tree({ label: "test", id: "5"})
   ]);
-  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
-  equal(treeModel.getNbTotalChildren(), 3, "> 0");
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  equal(tree.getNbTotalChildren(), 3, "> 0");
 });
 
 test("getNbChildrenChecked when model has no children checked", function() {
-  var treeModels = new TreeCollection([
-    new TreeModel({ label: "test", id: "2"}),
-    new TreeModel({ label: "test", id: "3"}),
-    new TreeModel({ label: "test", id: "5"})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2"}),
+    new Tree({ label: "test", id: "3"}),
+    new Tree({ label: "test", id: "5"})
   ]);
-  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
-  equal(treeModel.getNbChildrenChecked(), 0, "No children checked");
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  equal(tree.getNbChildrenChecked(), 0, "No children checked");
 });
 
 test("getNbChildrenChecked when model has children checked", function() {
-  var treeModels = new TreeCollection([
-    new TreeModel({ label: "test", id: "2", isChecked: true}),
-    new TreeModel({ label: "test", id: "3", isChecked: true}),
-    new TreeModel({ label: "test", id: "5"})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2", isChecked: true}),
+    new Tree({ label: "test", id: "3", isChecked: true}),
+    new Tree({ label: "test", id: "5"})
   ]);
-  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
-  equal(treeModel.getNbChildrenChecked(), 2, "Two child checked");
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  equal(tree.getNbChildrenChecked(), 2, "Two child checked");
 });
 
 test("getChildrenChecked when two children are checked", function() {
-  var treeModels = new TreeCollection([
-    new TreeModel({ label: "test", id: "2", isChecked: true}),
-    new TreeModel({ label: "test", id: "3", isChecked: true}),
-    new TreeModel({ label: "test", id: "5"})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2", isChecked: true}),
+    new Tree({ label: "test", id: "3", isChecked: true}),
+    new Tree({ label: "test", id: "5"})
   ]);
-  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
-  equal(treeModel.getChildrenChecked().length, 2, "One child checked");
-  equal(treeModel.getChildrenChecked()[0].get("id"), "2", "One child checked");
-  equal(treeModel.getChildrenChecked()[1].get("id"), "3", "One child checked");
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  equal(tree.getChildrenChecked().length, 2, "One child checked");
+  equal(tree.getChildrenChecked()[0].get("id"), "2", "One child checked");
+  equal(tree.getChildrenChecked()[1].get("id"), "3", "One child checked");
 });
 
 test("allChildrenChecked when has not all children checked", function() {
-  var treeModels = new TreeCollection([
-    new TreeModel({ label: "test", id: "2", isChecked: true}),
-    new TreeModel({ label: "test", id: "3", isChecked: true}),
-    new TreeModel({ label: "test", id: "5"})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2", isChecked: true}),
+    new Tree({ label: "test", id: "3", isChecked: true}),
+    new Tree({ label: "test", id: "5"})
   ]);
-  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
-  equal(treeModel.allChildrenChecked(), false, "Not all");
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  equal(tree.allChildrenChecked(), false, "Not all");
 });
 
 test("allChildrenChecked when model has all children checked", function() {
-  var treeModels = new TreeCollection([
-    new TreeModel({ label: "test", id: "2", isChecked: true}),
-    new TreeModel({ label: "test", id: "3", isChecked: true}),
-    new TreeModel({ label: "test", id: "5", isChecked: true})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2", isChecked: true}),
+    new Tree({ label: "test", id: "3", isChecked: true}),
+    new Tree({ label: "test", id: "5", isChecked: true})
   ]);
-  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
-  equal(treeModel.allChildrenChecked(), true, "All");
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  equal(tree.allChildrenChecked(), true, "All");
 });
 
 test("hasChildren when model is checked and has no children", function() {
-  var treeModels = new TreeCollection([
-    new TreeModel({ label: "test", id: "2", isChecked: true}),
-    new TreeModel({ label: "test", id: "3", isChecked: true}),
-    new TreeModel({ label: "test", id: "5", isChecked: true})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2", isChecked: true}),
+    new Tree({ label: "test", id: "3", isChecked: true}),
+    new Tree({ label: "test", id: "5", isChecked: true})
   ]);
-  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
-  equal(treeModel.hasChildren(), true, "Has children");
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  equal(tree.hasChildren(), true, "Has children");
 });
 
 test("toggleCheck to false when model is checked and has no children", function() {
-  var treeModels = new TreeCollection([
-    new TreeModel({ label: "test", id: "2", isChecked: true}),
-    new TreeModel({ label: "test", id: "3", isChecked: true}),
-    new TreeModel({ label: "test", id: "5", isChecked: true})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2", isChecked: true}),
+    new Tree({ label: "test", id: "3", isChecked: true}),
+    new Tree({ label: "test", id: "5", isChecked: true})
   ]);
-  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
-  treeModel.toggleCheck(false);
-  equal(treeModel.getNbChildrenChecked(), 0, "Not one checked");
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  tree.toggleCheck(false);
+  equal(tree.getNbChildrenChecked(), 0, "Not one checked");
 });
 
 test("toggleCheck to true when model is checked and has no children", function() {
-  var treeModels = new TreeCollection([
-    new TreeModel({ label: "test", id: "2"}),
-    new TreeModel({ label: "test", id: "3"}),
-    new TreeModel({ label: "test", id: "5"})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2"}),
+    new Tree({ label: "test", id: "3"}),
+    new Tree({ label: "test", id: "5"})
   ]);
-  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
-  treeModel.toggleCheck(true);
-  equal(treeModel.getNbChildrenChecked(), 3, "All children checked");
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  tree.toggleCheck(true);
+  equal(tree.getNbChildrenChecked(), 3, "All children checked");
 });
 
 test("toggleFromIds to false when model has children", function() {
-  var treeModels = new TreeCollection([
-    new TreeModel({ label: "test", id: "2", isChecked: true}),
-    new TreeModel({ label: "test", id: "3", isChecked: true}),
-    new TreeModel({ label: "test", id: "5", isChecked: true})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2", isChecked: true}),
+    new Tree({ label: "test", id: "3", isChecked: true}),
+    new Tree({ label: "test", id: "5", isChecked: true})
   ]);
-  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
-  treeModel.toggleFromIds(["5"], false);
-  equal(treeModel.getNbChildrenChecked(), 2, "Two checked");
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  tree.toggleFromIds(["5"], false);
+  equal(tree.getNbChildrenChecked(), 2, "Two checked");
 });
 
 test("toggleFromIds to true when model has children", function() {
-  var treeModels = new TreeCollection([
-    new TreeModel({ label: "test", id: "2"}),
-    new TreeModel({ label: "test", id: "3"}),
-    new TreeModel({ label: "test", id: "5"})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2"}),
+    new Tree({ label: "test", id: "3"}),
+    new Tree({ label: "test", id: "5"})
   ]);
-  var treeModel = new TreeModel({ label: "test", id: "1", children: treeModels});
-  treeModel.toggleFromIds(["2", "3"], true);
-  equal(treeModel.getNbChildrenChecked(), 2, "Two checked");
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  tree.toggleFromIds(["2", "3"], true);
+  equal(tree.getNbChildrenChecked(), 2, "Two checked");
 });
 
 // ---------------------------
-// Filled TreeCollection
+// Filled Trees
 // ---------------------------
 
 test("getChildrenChecked when collection is filled", function() {
-  var treeCollection = new TreeCollection([
-    new TreeModel({ label: "test", id: "2", isChecked: true}),
-    new TreeModel({ label: "test", id: "3", isChecked: true}),
-    new TreeModel({ label: "test", id: "5"})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2", isChecked: true}),
+    new Tree({ label: "test", id: "3", isChecked: true}),
+    new Tree({ label: "test", id: "5"})
   ]);
-  equal(treeCollection.getChildrenChecked().length, 2, "Return two children checked");
+  equal(trees.getChildrenChecked().length, 2, "Return two children checked");
 });
 
 test("getNbChildrenChecked when collection is filled", function() {
-  var treeCollection = new TreeCollection([
-    new TreeModel({ label: "test", id: "2", isChecked: true}),
-    new TreeModel({ label: "test", id: "3", isChecked: true}),
-    new TreeModel({ label: "test", id: "5"})
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2", isChecked: true}),
+    new Tree({ label: "test", id: "3", isChecked: true}),
+    new Tree({ label: "test", id: "5"})
   ]);
-  equal(treeCollection.getNbChildrenChecked(), 2, "Two children are checked");
+  equal(trees.getNbChildrenChecked(), 2, "Two children are checked");
 });
