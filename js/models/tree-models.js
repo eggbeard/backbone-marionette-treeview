@@ -109,7 +109,7 @@ Tree = Backbone.Model.extend({
     if (!this.hasChildren()) return callback(this, 0);
     return this.get("children").reduce(function(total, child) {
       if (child.hasChildren())
-        return total + child._countLeafsFor(callback);
+        return total + child._countLeavesFor(callback);
       else
         return total + callback(child, total);
     }, 0, this);
