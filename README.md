@@ -14,7 +14,7 @@ Nice tree view built on top of Backbone &amp; Backbone Marionette
 2. Add the js and css from the lib folder
 3. Don't forget to add the dependencies (see Requirements section)
 
-##Usage
+## Usage
 1. Setup your collection of Tree models (alias Trees)
 
   <pre>
@@ -34,7 +34,7 @@ Nice tree view built on top of Backbone &amp; Backbone Marionette
   <pre>$("...").html(treeView.render().el)</pre>
   
   
-##Recursive
+## Recursive
 If you want a recursive structure, just add a new Trees collection as "children" field to your Tree model:
 
 <pre>var trees = new Trees([
@@ -43,7 +43,7 @@ If you want a recursive structure, just add a new Trees collection as "children"
   new Tree({ label: "test3", id: "3"})
 ]);</pre>
   
-  <pre>var rootNode = new Tree({ label: "rootNode", id: "10", children: trees });</pre>
+<pre>var rootNode = new Tree({ label: "rootNode", id: "10", children: trees });</pre>
   
 ## Checkbox
 By default, you have a checkbox in each node, so you can decide if they will be check or uncheck at start (default is not):
@@ -54,6 +54,17 @@ By default, you have a checkbox in each node, so you can decide if they will be 
 When a checkbox change of state, a "checked" event is trigger on the top collection of your structure. It's the same collection that you pass through your TreeView to render.
 
 <pre>trees.on("checked", method, context)</pre>
+
+
+## Build & Run
+In order to run properly the test, you need to have setup a server web. You can use it inside the project folder.
+<pre>python -m SimpleHTTPServer</pre>
+
+You have access from localhost:8000 now and you can run build and test:
+<pre>
+sudo npm install -g grunt-cli
+sudo npm install -g
+grunt</pre>
 
 ## More
 You can check the source code or tests if you want have more details.
