@@ -55,6 +55,7 @@ When a checkbox change of state, a "checked" event is trigger on the top collect
 
 <pre>trees.on("checked", method, context)</pre>
 
+If you want to catch any checkbox changes, you have to bind your collection on "change:isChecked".
 
 ## Build & Run
 In order to run properly the test, you need to have setup a server web. You can use it inside the project folder.
