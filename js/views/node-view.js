@@ -33,8 +33,9 @@ NodeView = Marionette.CompositeView.extend({
     list: ".tree-view-list"
   },
 
-  initialize: function() {
+  initialize: function(options) {
     this.collection = this.model.get("children");
+    this.template = options.template || this.template;
 
     if (this.model.hasChildren())
       this.$el.addClass("tree-view-branch");

@@ -14,6 +14,12 @@ TreeView = Marionette.CollectionView.extend({
   tagName: "ul",
   className: "tree-view-root",
 
+  itemViewOptions: function() {
+    return {
+      template: this.options.template
+    };
+  },
+
   expand: function() { this.children.each(function(child) { child.expand(); }); },
   collapse: function() { this.children.each(function(child) { child.collapse(); }); },
   toggleView: function() { this.children.each(function(child) { child.toggleView(); }); }
