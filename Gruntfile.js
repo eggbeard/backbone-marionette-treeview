@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     stylus: {
       compile: {
         files: {
-          'lib/css/backbone-marionette-treeview.css': 'stylus/backbone-marionette-treeview.styl'
+          'bin/css/backbone-marionette-treeview.css': 'stylus/backbone-marionette-treeview.styl'
         }
       }
     },
@@ -18,7 +18,7 @@ module.exports = function(grunt) {
       'dev': {
         include: ["js"],
         src: "main.js",
-        dest: 'lib/js/backbone-marionette-treeview.js'
+        dest: 'bin/js/backbone-marionette-treeview.js'
       }
     },
 
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
         }
       },
       js: {
-        files: ['js/**/*.js', '!lib/**/*.js', '!node_modules/**/*.js'],
+        files: ['js/**/*.js', '!bin/**/*.js', '!node_modules/**/*.js'],
         tasks: ['jshint', 'mince:dev'],
         options: {
           debounceDelay: 250
@@ -40,14 +40,14 @@ module.exports = function(grunt) {
     },
 
     clean: {
-      dev: ["lib/js/backbone-marionette-treeview.js", "lib/css/backbone-marionette-treeview.css"],
-      dist: ["lib/js", "lib/css"]
+      dev: ["bin/js/backbone-marionette-treeview.js", "bin/css/backbone-marionette-treeview.css"],
+      dist: ["bin/js", "bin/css"]
     },
 
     cssmin: {
       compress: {
         files: {
-          "lib/css/backbone-marionette-treeview.min.css": ["lib/css/backbone-marionette-treeview.css"]
+          "bin/css/backbone-marionette-treeview.min.css": ["bin/css/backbone-marionette-treeview.css"]
         }
       }
     },
@@ -59,7 +59,7 @@ module.exports = function(grunt) {
           compress: true
         },
         files: {
-          'lib/js/backbone-marionette-treeview.min.js': ['lib/js/backbone-marionette-treeview.js']
+          'bin/js/backbone-marionette-treeview.min.js': ['bin/js/backbone-marionette-treeview.js']
         }
       }
     },
@@ -80,7 +80,7 @@ module.exports = function(grunt) {
           asi      : true,
           multistr : true
         },
-        src: ['Gruntfile.js', 'lib/js/backbone-marionette-treeview.js']
+        src: ['Gruntfile.js', 'bin/js/backbone-marionette-treeview.js']
       }
     },
 
