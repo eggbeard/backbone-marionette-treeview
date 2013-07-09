@@ -46,9 +46,9 @@ If you want a recursive structure, just add a new Trees collection as "children"
 <pre>var rootNode = new Tree({ label: "rootNode", id: "10", children: trees });</pre>
   
 ## Checkbox
-By default, you have a checkbox in each node, so you can decide if they will be check or uncheck at start (default is not):
+By default, you have a checkbox in each node, so you can decide if they will be check or uncheck at start:
 
-<pre>var node = new Tree({ label: "node", id: "1", isChecked: true });</pre>
+<pre>var node = new Tree({ label: "node", id: "1", isChecked: true }); // Default: isChecked = false</pre>
 
 ## Checkbox Events
 When a checkbox change of state, a "checked" event is trigger on the top collection of your structure. It's the same collection that you pass through your TreeView to render.
