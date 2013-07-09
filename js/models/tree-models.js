@@ -10,19 +10,27 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 */
 Trees = Backbone.Collection.extend({
-  getChildrenChecked: function() {
+  getLeavesChecked: function() {
     var modelsChecked = this.map(function(model) {
-      return model.getChildrenChecked();
+      return model.getLeavesChecked();
     }, this);
     return _.flatten(modelsChecked);
   },
 
-  getNbChildrenChecked: function() {
-    return this.getChildrenChecked().length;
+  countLeavesChecked: function() {
+    return this.getLeavesChecked().length;
   },
 
-  toggleFromIds: function(ids, isChecked) {
-    this.each(function(child) { child.toggleFromIds(ids, isChecked); });
+  checkFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, true);
+  },
+
+  uncheckFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, false);
+  },
+
+  _setIsCheckedFromIds: function(ids, isChecked) {
+    this.each(function(child) { child._setIsCheckedFromIds(ids, isChecked); });
   }
 
 });
@@ -38,22 +46,30 @@ Tree = Backbone.Model.extend({
     if (!this.get("children")) this.set("children", new Trees());
   },
 
-  toggleFromIds: function(ids, isChecked) {
-    if (_.contains(ids, this.id)) this.set("isChecked", isChecked);
-    this.get("children").each(function(child) { child.toggleFromIds(ids, isChecked); });
+  toggleCheckFromIds: function(ids) {
+    var isChecked = !this.get("isChecked");
+    this._setIsCheckedFromIds(ids, isChecked);
+  },
+
+  checkFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, true);
+  },
+
+  uncheckFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, false);
   },
 
   // Helpers
-  getNbTotalChildren: function() {
-    return this._getNbChildrenFor($.proxy(this._inc, this));
+  countLeaves: function() {
+    return this._countLeavesFor($.proxy(this._inc, this));
   },
 
-  getChildrenChecked: function() {
+  getLeavesChecked: function() {
     if (this.get("isChecked") && !this.hasChildren()) return [this];
 
     var modelsChecked = this.get("children").map(function(child) {
       if (child.hasChildren())
-        return child.getChildrenChecked();
+        return child.getLeavesChecked();
       else if (child.get("isChecked"))
         return child;
       else
@@ -63,32 +79,50 @@ Tree = Backbone.Model.extend({
     return _.flatten(modelsChecked);
   },
 
-  getNbChildrenChecked: function() {
-    return this._getNbChildrenFor($.proxy(this._isChecked, this));
+  countLeavesChecked: function() {
+    return this._countLeavesFor($.proxy(this._isChecked, this));
   },
 
-  allChildrenChecked: function() {
-    return this.getNbChildrenChecked() === this.getNbTotalChildren();
+  areLeavesAllChecked: function() {
+    return this.countLeavesChecked() === this.countLeaves();
   },
 
   hasChildren: function() {
     return this.get("children").size() > 0;
   },
 
-  toggleCheck: function(isChecked) {
-    this.set("isChecked", isChecked);
-    this.get("children").each(function(child) { child.toggleCheck(isChecked); });
+  toggleCheck: function() {
+    var isChecked = !this.get("isChecked");
+    this._setIsChecked(isChecked);
+  },
+
+  check: function() {
+    this._setIsChecked(true);
+  },
+
+  uncheck: function() {
+    this._setIsChecked(false);
   },
 
   // Internals methods
-  _getNbChildrenFor: function(callback) {
+  _countLeavesFor: function(callback) {
     if (!this.hasChildren()) return callback(this, 0);
     return this.get("children").reduce(function(total, child) {
       if (child.hasChildren())
-        return total + child._getNbChildrenFor(callback);
+        return total + child._countLeafsFor(callback);
       else
         return total + callback(child, total);
     }, 0, this);
+  },
+
+  _setIsCheckedFromIds: function(ids, isChecked) {
+    if (_.contains(ids, this.id)) this.set("isChecked", isChecked);
+    this.get("children").each(function(child) { child._setIsCheckedFromIds(ids, isChecked); });
+  },
+
+  _setIsChecked: function(isChecked) {
+    this.set("isChecked", isChecked);
+    this.get("children").each(function(child) { child._setIsChecked(isChecked); });
   },
 
   // Callbacks

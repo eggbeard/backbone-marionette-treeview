@@ -81,10 +81,10 @@ NodeView = Marionette.CompositeView.extend({
   },
 
   toggleMyself: function() {
-    if (this.model.allChildrenChecked()) {
+    if (this.model.areLeavesAllChecked()) {
       this.ui.checkbox.prop("checked", true);
       this.ui.checkbox.prop("indeterminate", false);
-    } else if (this.model.getNbChildrenChecked() > 0) {
+    } else if (this.model.countLeavesChecked() > 0) {
       this.ui.checkbox.prop("indeterminate", true);
     } else {
       this.ui.checkbox.prop("checked", false);
@@ -115,7 +115,7 @@ NodeView = Marionette.CompositeView.extend({
   },
 
   onCheck: function(event) {
-    this.model.toggleCheck(this.ui.checkbox.prop("checked"));
+    this.model.toggleCheck();
     this.model.collection.trigger("checked");
     event.stopPropagation();
   },
