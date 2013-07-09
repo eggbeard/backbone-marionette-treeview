@@ -82,6 +82,16 @@ module.exports = function(grunt) {
         },
         src: ['Gruntfile.js', 'lib/js/backbone-marionette-treeview.js']
       }
+    },
+
+    qunit: {
+      all: {
+        options: {
+          all: [
+            '/test/index.html'
+          ]
+        }
+      }
     }
   });
 
@@ -93,8 +103,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
 
   // Default task(s).
-  grunt.registerTask('default',  ['clean','stylus', 'mince', 'jshint', 'uglify']);
+  grunt.registerTask('default',  ['clean','stylus', 'mince', 'jshint', 'uglify', 'qunit']);
   grunt.registerTask('dev',  ['clean','stylus', 'mince', 'jshint', 'uglify', 'watch']);
 };

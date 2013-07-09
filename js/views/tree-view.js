@@ -10,7 +10,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 */
 TreeView = Marionette.CollectionView.extend({
-  itemView: views.NodeView,
+  itemView: NodeView,
   tagName: "ul",
   className: "tree-view-root",
 

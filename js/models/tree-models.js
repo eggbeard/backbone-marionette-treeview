@@ -9,7 +9,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-models.TreeViews = Backbone.Collection.extend({
+TreeCollection = Backbone.Collection.extend({
   getChildrenChecked: function() {
     var modelsChecked = this.map(function(model) {
       return model.getChildrenChecked();
@@ -23,7 +23,7 @@ models.TreeViews = Backbone.Collection.extend({
 
 });
 
-models.TreeView = Backbone.Model.extend({
+TreeModel = Backbone.Model.extend({
   defaults: {
     id: 0,
     label: "Default",
@@ -31,7 +31,7 @@ models.TreeView = Backbone.Model.extend({
   },
 
   initialize: function() {
-    if (!this.get("children")) this.set("children", new models.TreeViews());
+    if (!this.get("children")) this.set("children", new TreeCollection());
   },
 
   // Helpers
@@ -40,7 +40,7 @@ models.TreeView = Backbone.Model.extend({
   },
 
   getChildrenChecked: function() {
-    if (this.get("isChecked") !== 0 && !this.hasChildren()) return [this];
+    if (this.get("isChecked") && !this.hasChildren()) return [this];
 
     var modelsChecked = this.get("children").map(function(child) {
       if (child.hasChildren())
@@ -92,4 +92,4 @@ models.TreeView = Backbone.Model.extend({
 });
 
 // Define model for treeViews
-models.TreeViews.model = models.TreeViews;
+TreeCollection.model = TreeModel;
