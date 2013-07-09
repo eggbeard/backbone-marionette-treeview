@@ -9,6 +9,11 @@ Nice tree view built on top of Backbone &amp; Backbone Marionette
    - Backbone
    - Marionette
 
+## Installation
+1. Clone the project or download it
+2. Add the js and css from the lib folder
+3. Don't forget to add the dependencies (see Requirements section)
+
 ##Usage
 1. Setup your collection of Tree models (alias Trees)
 
