@@ -11,7 +11,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 var templateNode = '\
   <a>\
-    <%=(hasChildren ? "<span class=\"tree-view-chevron\">&#9658</span>" : "")%>\
+    <%=(hasChildren ? "<span class=tree-view-chevron>&#9658</span>" : "")%>\
     <input id="<%=autoId%>"type="checkbox" <%=(isChecked ? "checked" : "")%> class="tree-view-checkbox" data-id="<%=id%>"/>\
     <label for="<%=autoId%>" class="tree-view-label"><%=label%></label>\
   </a>\
@@ -22,7 +22,7 @@ var templateNode = '\
 NodeView = Marionette.CompositeView.extend({
   tagName: "li",
   className: "tree-view-node",
-  template: templateNode,
+  template: _.template(templateNode),
   chevronRight: "&#9658;",
   chevronDown: "&#9660;",
 
