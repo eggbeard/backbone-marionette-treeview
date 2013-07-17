@@ -158,7 +158,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 */
 
-var templateNode = '\
+var templateNode = _.template('\
   <a>\
     <%=(hasChildren ? "<span class=tree-view-chevron>&#9658</span>" : "")%>\
     <input id="<%=autoId%>"type="checkbox" <%=(isChecked ? "checked" : "")%> class="tree-view-checkbox" data-id="<%=id%>"/>\
@@ -166,12 +166,12 @@ var templateNode = '\
   </a>\
   <ul class="tree-view-list">\
   </ul>\
-  ';
+  ');
 
 NodeView = Marionette.CompositeView.extend({
   tagName: "li",
   className: "tree-view-node",
-  template: _.template(templateNode),
+  template: templateNode,
   chevronRight: "&#9658;",
   chevronDown: "&#9660;",
 
@@ -184,15 +184,17 @@ NodeView = Marionette.CompositeView.extend({
   },
 
   initialize: function(options) {
-    this.collection = this.model.get("children");
     this.template = options.template || this.template;
 
     if (this.model.hasChildren())
       this.$el.addClass("tree-view-branch");
     else
-      this.$el.addClass("tree-view-leaf") ;
+      this.$el.addClass("tree-view-leaf");
+  },
 
-    // Bubble change
+  bindCollection: function() {
+    this.collection = this.model.get("children");
+    this.collection.off("checked");
     this.collection.on("checked", this.triggerChange, this);
     this.collection.on("checked", this.toggleMyself, this);
   },
@@ -202,7 +204,8 @@ NodeView = Marionette.CompositeView.extend({
   },
 
   onRender: function() {
-    if (this.model.get("isChecked")) this.triggerChange();
+    this.bindCollection();
+    this.toggleMyself();
     if (this.model.get("class")) this.ui.icon.addClass(this.model.get("class"));
   },
 
@@ -212,7 +215,7 @@ NodeView = Marionette.CompositeView.extend({
 
   serializeData: function() {
     return {
-      autoId: Math.random() * 1000000 + 10000,
+      autoId: _.uniqueId(),
       hasChildren: this.model.hasChildren(),
       label: this.model.get("label"),
       isChecked: this.model.get("isChecked"),
@@ -230,10 +233,12 @@ NodeView = Marionette.CompositeView.extend({
   },
 
   toggleMyself: function() {
+    if (!this.model.hasChildren()) return this.ui.checkbox.prop("checked", this.model.get("isChecked"));
+
     if (this.model.areLeavesAllChecked()) {
       this.ui.checkbox.prop("checked", true);
       this.ui.checkbox.prop("indeterminate", false);
-    } else if (this.model.countLeavesChecked() > 0) {
+    } else if (this.model.countLeavesChecked() > 0 && this.model.hasChildren()) {
       this.ui.checkbox.prop("indeterminate", true);
     } else {
       this.ui.checkbox.prop("checked", false);
@@ -248,6 +253,7 @@ NodeView = Marionette.CompositeView.extend({
   },
 
   toggleView: function() {
+    this._renderChildren();
     this.$el.toggleClass("open");
     this.switchChevron();
     return false;
@@ -270,6 +276,7 @@ NodeView = Marionette.CompositeView.extend({
   },
 
   expand: function() {
+    this._renderChildren();
     this.$el.addClass("open");
     this.switchChevron();
     this.children.each(function(child) { child.expand(); });
@@ -281,6 +288,7 @@ NodeView = Marionette.CompositeView.extend({
     this.children.each(function(child) { child.collapse(); });
   }
 });
+
 
 
 /***  js/views/tree-view  ***/
