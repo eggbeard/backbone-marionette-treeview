@@ -1,7 +1,7 @@
 backbone-marionette-treeview
 ============================
 
-Nice tree view built on top of Backbone &amp; Backbone Marionette
+Nice tree view built on top of Backbone &amp; Backbone Marionette. Optimizated for lazy rendering (render only visible node).
 
 ## Requirements
    - JQuery
