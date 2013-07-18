@@ -76,7 +76,7 @@ Tree = Backbone.Model.extend({
 
     var modelsId = this.get("children").map(function(child) {
       if (child.hasChildren())
-        return child.getLeavesChecked();
+        return child.getChildrenIds();
       else
         return child.id;
     }, this);
