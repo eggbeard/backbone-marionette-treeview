@@ -61,6 +61,12 @@ test("toggleFromIds when model is checked and has no children", function() {
   equal(tree.get("isChecked"), true, "Not checked");
 });
 
+test("getChildrenIds when model has children", function() {
+  var trees = new Trees([]);
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  equal(_.difference(trees.getChildrenIds(), []).length, 0, "Children Ids");
+});
+
 // ---------------------------
 // Empty Trees
 // ---------------------------
@@ -73,6 +79,11 @@ test("getChildrenChecked when collection is empty", function() {
 test("countLeavesChecked when collection is empty", function() {
   var trees = new Trees();
   equal(trees.countLeavesChecked(), 0, "No children checked because collection has no models");
+});
+
+test("getChildrenIds when collection is filled", function() {
+  var trees = new Trees([]);
+  equal(_.difference(trees.getChildrenIds(), []).length, 0, "Children Ids");
 });
 
 // ---------------------------
@@ -194,6 +205,16 @@ test("checkFromIds when model has children", function() {
   equal(tree.countLeavesChecked(), 2, "Two checked");
 });
 
+test("getChildrenIds when model has children", function() {
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2"}),
+    new Tree({ label: "test", id: "3"}),
+    new Tree({ label: "test", id: "5"})
+  ]);
+  var tree = new Tree({ label: "test", id: "1", children: trees});
+  equal(_.difference(trees.getChildrenIds(), ["2", "3", "5"]).length, 0, "Children Ids");
+});
+
 // ---------------------------
 // Filled Trees
 // ---------------------------
@@ -214,4 +235,14 @@ test("countLeavesChecked when collection is filled", function() {
     new Tree({ label: "test", id: "5"})
   ]);
   equal(trees.countLeavesChecked(), 2, "Two children are checked");
+});
+
+test("getChildrenIds when collection is filled", function() {
+  var trees = new Trees([
+    new Tree({ label: "test", id: "2", isChecked: true}),
+    new Tree({ label: "test", id: "3", isChecked: true}),
+    new Tree({ label: "test", id: "5"})
+  ]);
+
+  equal(_.difference(trees.getChildrenIds(), ["2", "3", "5"]).length, 0, "Children Ids");
 });

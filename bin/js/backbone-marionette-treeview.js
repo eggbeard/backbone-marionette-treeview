@@ -22,6 +22,13 @@ Trees = Backbone.Collection.extend({
     return _.flatten(modelsChecked);
   },
 
+  getChildrenIds: function() {
+    var modelsId = this.map(function(model) {
+      return model.getChildrenIds();
+    }, this);
+    return _.flatten(modelsId);
+  },
+
   countLeavesChecked: function() {
     return this.getLeavesChecked().length;
   },
@@ -62,6 +69,19 @@ Tree = Backbone.Model.extend({
 
   uncheckFromIds: function(ids) {
     this._setIsCheckedFromIds(ids, false);
+  },
+
+  getChildrenIds: function() {
+    if (!this.hasChildren()) return [this.id];
+
+    var modelsId = this.get("children").map(function(child) {
+      if (child.hasChildren())
+        return child.getLeavesChecked();
+      else
+        return child.id;
+    }, this);
+
+    return _.flatten(modelsId);
   },
 
   // Helpers
