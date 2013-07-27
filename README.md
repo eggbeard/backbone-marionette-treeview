@@ -1,10 +1,10 @@
 backbone-marionette-treeview
 ============================
 
-Nice tree view built on top of Backbone &amp; Backbone Marionette. Optimizated for lazy rendering (render only visible node).
+Nice tree view built on top of Backbone &amp; Backbone Marionette. Optimized for lazy rendering - only visible nodes are rendered.
 
 ## Requirements
-   - JQuery
+   - jQuery
    - Underscore
    - Backbone
    - Marionette
@@ -15,7 +15,7 @@ Nice tree view built on top of Backbone &amp; Backbone Marionette. Optimizated f
 3. Don't forget to add the dependencies (see Requirements section)
 
 ## Usage
-1. Setup your collection of Tree models (alias Trees)
+1. Instantiate a collection of Tree models
 
   <pre>
     var trees = new Trees([
@@ -35,7 +35,7 @@ Nice tree view built on top of Backbone &amp; Backbone Marionette. Optimizated f
   
   
 ## Recursive
-If you want a recursive structure, just add a new Trees collection as "children" field to your Tree model:
+If you want a recursive structure, add a Trees collection as a "children" field on your Tree model:
 
 <pre>var trees = new Trees([
   new Tree({ label: "test1", id: "1"}), 
@@ -46,27 +46,27 @@ If you want a recursive structure, just add a new Trees collection as "children"
 <pre>var rootNode = new Tree({ label: "rootNode", id: "10", children: trees });</pre>
   
 ## Checkbox
-By default, you have a checkbox in each node, so you can decide if they will be check or uncheck at start:
+By default, you have a checkbox for each node. To indicate that the node is checked or unchecked, use the `isChecked` attribute:
 
 <pre>var node = new Tree({ label: "node", id: "1", isChecked: true }); // Default: isChecked = false</pre>
 
 ## Checkbox Events
-When a checkbox change of state, a "checked" event is trigger on the top collection of your structure. It's the same collection that you pass through your TreeView to render.
+When a checkbox becomes checked or unchecked, a "checked" event is triggered on your `TreeView` collection. 
 
 <pre>trees.on("checked", method, context)</pre>
 
-If you want to catch any checkbox changes, you have to bind your collection on "change:isChecked".
+If you want to capture all checkbox changes, you should bind to your collection's "change:isChecked" event.
 
 ## Build & Run
-In order to run properly the test, you need to have setup a server web. You can use it inside the project folder.
+In order to run the tests, you need to run them on a web server. If you have Python installed, you can type the 
+following command in the project folder.
 <pre>python -m SimpleHTTPServer</pre>
 
-You have access from localhost:8000 now and you can run build and test:
+You now have access to a web server on localhost:8000 and can run the `build` and `test` grunt commands:
 <pre>
 sudo npm install -g grunt-cli
 sudo npm install -g
 grunt</pre>
 
 ## More
-You can check the source code or tests if you want have more details.
-
+Read the source code and tests for more details.
