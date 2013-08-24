@@ -1,6 +1,4 @@
-
-
-/***  js/models/tree-models  ***/
+(function(Backbone, Marionette, _, $) {
 
 /*
 
@@ -14,40 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 */
 
-Trees = Backbone.Collection.extend({
-  getLeavesChecked: function() {
-    var modelsChecked = this.map(function(model) {
-      return model.getLeavesChecked();
-    }, this);
-    return _.flatten(modelsChecked);
-  },
-
-  getChildrenIds: function() {
-    var modelsId = this.map(function(model) {
-      return model.getChildrenIds();
-    }, this);
-    return _.flatten(modelsId);
-  },
-
-  countLeavesChecked: function() {
-    return this.getLeavesChecked().length;
-  },
-
-  checkFromIds: function(ids) {
-    this._setIsCheckedFromIds(ids, true);
-  },
-
-  uncheckFromIds: function(ids) {
-    this._setIsCheckedFromIds(ids, false);
-  },
-
-  _setIsCheckedFromIds: function(ids, isChecked) {
-    this.each(function(child) { child._setIsCheckedFromIds(ids, isChecked); });
-  }
-
-});
-
-Tree = Backbone.Model.extend({
+var Tree = Backbone.Tree = Backbone.Model.extend({
   defaults: {
     id: 0,
     label: "Default",
@@ -55,7 +20,7 @@ Tree = Backbone.Model.extend({
   },
 
   initialize: function() {
-    if (!this.get("children")) this.set("children", new Trees());
+    if (!this.get("children")) this.set("children", new Backbone.Trees());
   },
 
   toggleCheckFromIds: function(ids) {
@@ -159,13 +124,39 @@ Tree = Backbone.Model.extend({
 
 });
 
-// Define model for treeViews
-Trees.model = Tree;
+var Trees = Backbone.Trees = Backbone.Collection.extend({
+  model: Tree,
 
+  getLeavesChecked: function() {
+    var modelsChecked = this.map(function(model) {
+      return model.getLeavesChecked();
+    }, this);
+    return _.flatten(modelsChecked);
+  },
 
+  getChildrenIds: function() {
+    var modelsId = this.map(function(model) {
+      return model.getChildrenIds();
+    }, this);
+    return _.flatten(modelsId);
+  },
 
-/***  js/views/node-view  ***/
+  countLeavesChecked: function() {
+    return this.getLeavesChecked().length;
+  },
 
+  checkFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, true);
+  },
+
+  uncheckFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, false);
+  },
+
+  _setIsCheckedFromIds: function(ids, isChecked) {
+    this.each(function(child) { child._setIsCheckedFromIds(ids, isChecked); });
+  }
+});
 /*
 
 Copyright (C) 2013 Acquisio Inc. V0.1.1
@@ -177,7 +168,6 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-
 var templateNode = _.template('\
   <a>\
     <%=(hasChildren ? "<span class=tree-view-chevron>&#9658</span>" : "")%>\
@@ -188,7 +178,7 @@ var templateNode = _.template('\
   </ul>\
   ');
 
-NodeView = Marionette.CompositeView.extend({
+var NodeView = Marionette.NodeView = Marionette.CompositeView.extend({
   tagName: "li",
   className: "tree-view-node",
   template: templateNode,
@@ -309,10 +299,6 @@ NodeView = Marionette.CompositeView.extend({
   }
 });
 
-
-
-/***  js/views/tree-view  ***/
-
 /*
 
 Copyright (C) 2013 Acquisio Inc. V0.1.1
@@ -325,7 +311,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 */
 
-TreeView = Marionette.CollectionView.extend({
+var TreeView = Marionette.TreeView = Marionette.CollectionView.extend({
   itemView: NodeView,
   tagName: "ul",
   className: "tree-view-root",
@@ -340,15 +326,4 @@ TreeView = Marionette.CollectionView.extend({
   collapse: function() { this.children.each(function(child) { child.collapse(); }); },
   toggleView: function() { this.children.each(function(child) { child.toggleView(); }); }
 });
-
-
-/***  js/views/main  ***/
-
-
-;
-
-
-/***  js/main  ***/
-
-
-;
+})(this.Backbone, this.Marionette, this._, this.$)
