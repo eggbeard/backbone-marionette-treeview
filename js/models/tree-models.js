@@ -9,40 +9,8 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-Trees = Backbone.Collection.extend({
-  getLeavesChecked: function() {
-    var modelsChecked = this.map(function(model) {
-      return model.getLeavesChecked();
-    }, this);
-    return _.flatten(modelsChecked);
-  },
 
-  getChildrenIds: function() {
-    var modelsId = this.map(function(model) {
-      return model.getChildrenIds();
-    }, this);
-    return _.flatten(modelsId);
-  },
-
-  countLeavesChecked: function() {
-    return this.getLeavesChecked().length;
-  },
-
-  checkFromIds: function(ids) {
-    this._setIsCheckedFromIds(ids, true);
-  },
-
-  uncheckFromIds: function(ids) {
-    this._setIsCheckedFromIds(ids, false);
-  },
-
-  _setIsCheckedFromIds: function(ids, isChecked) {
-    this.each(function(child) { child._setIsCheckedFromIds(ids, isChecked); });
-  }
-
-});
-
-Tree = Backbone.Model.extend({
+var Tree = Backbone.Tree = Backbone.Model.extend({
   defaults: {
     id: 0,
     label: "Default",
@@ -50,7 +18,7 @@ Tree = Backbone.Model.extend({
   },
 
   initialize: function() {
-    if (!this.get("children")) this.set("children", new Trees());
+    if (!this.get("children")) this.set("children", new Backbone.Trees());
   },
 
   toggleCheckFromIds: function(ids) {
@@ -154,5 +122,36 @@ Tree = Backbone.Model.extend({
 
 });
 
-// Define model for treeViews
-Trees.model = Tree;
+var Trees = Backbone.Trees = Backbone.Collection.extend({
+  model: Tree,
+
+  getLeavesChecked: function() {
+    var modelsChecked = this.map(function(model) {
+      return model.getLeavesChecked();
+    }, this);
+    return _.flatten(modelsChecked);
+  },
+
+  getChildrenIds: function() {
+    var modelsId = this.map(function(model) {
+      return model.getChildrenIds();
+    }, this);
+    return _.flatten(modelsId);
+  },
+
+  countLeavesChecked: function() {
+    return this.getLeavesChecked().length;
+  },
+
+  checkFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, true);
+  },
+
+  uncheckFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, false);
+  },
+
+  _setIsCheckedFromIds: function(ids, isChecked) {
+    this.each(function(child) { child._setIsCheckedFromIds(ids, isChecked); });
+  }
+});
