@@ -14,11 +14,20 @@ module.exports = function(grunt) {
       }
     },
 
-    mince: {
-      'dev': {
-        include: ["js"],
-        src: "main.js",
+    concat: {
+      dev: {
+        src: ['js/models/tree-models.js', 'js/views/node-view.js', 'js/views/tree-view.js'],
         dest: 'bin/js/backbone-marionette-treeview.js'
+      }
+    },
+
+    wrap: {
+      basic: {
+        src: 'bin/js/backbone-marionette-treeview.js',
+        dest: 'bin/js/backbone-marionette-treeview.js',
+        options: {
+          wrapper: ['(function(Backbone, Marionette, _, $) {\n', '})(this.Backbone, this.Marionette, this._, this.$)']
+        }
       }
     },
 
@@ -99,13 +108,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-stylus');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-mincer');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-wrap');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-qunit');
 
   // Default task(s).
-  grunt.registerTask('default',  ['clean','stylus', 'mince', 'jshint', 'uglify', 'qunit']);
-  grunt.registerTask('dev',  ['clean','stylus', 'mince', 'jshint', 'uglify', 'watch']);
+  grunt.registerTask('default',  ['clean','stylus', 'concat', 'wrap', 'jshint', 'uglify', 'qunit']);
+  grunt.registerTask('dev',  ['clean','stylus', 'concat', 'wrap', 'jshint', 'uglify', 'watch']);
 };
