@@ -1,3 +1,6 @@
+var Tree = Backbone.Tree,
+  Trees = Backbone.Trees;
+
 // ---------------------------
 // Tree without children
 // ---------------------------
