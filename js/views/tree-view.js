@@ -21,7 +21,15 @@ var TreeView = Marionette.TreeView = Marionette.CollectionView.extend({
     };
   },
 
-  expand: function() { this.children.each(function(child) { child.expand(); }); },
-  collapse: function() { this.children.each(function(child) { child.collapse(); }); },
-  toggleView: function() { this.children.each(function(child) { child.toggleView(); }); }
+  expand: function() {
+    this.children.invoke('expand');
+  },
+
+  collapse: function() {
+    this.children.invoke('collapse');
+  },
+
+  toggleView: function() {
+    this.children.invoke('toggleView');
+  }
 });

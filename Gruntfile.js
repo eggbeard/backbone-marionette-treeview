@@ -26,7 +26,7 @@ module.exports = function(grunt) {
         src: 'bin/js/backbone-marionette-treeview.js',
         dest: 'bin/js/backbone-marionette-treeview.js',
         options: {
-          wrapper: ['(function(Backbone, Marionette, _, $) {\n', '})(this.Backbone, this.Marionette, this._, this.$)']
+          wrapper: ['(function(Backbone, Marionette, _, $) {\n', '})(this.Backbone, this.Marionette, this._, this.jQuery);']
         }
       }
     },
