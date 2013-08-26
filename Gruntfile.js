@@ -93,6 +93,10 @@ module.exports = function(grunt) {
       }
     },
 
+    connect: {
+      uses_defaults: {}
+    },
+
     qunit: {
       all: {
         options: {
@@ -113,9 +117,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-qunit');
 
   // Default task(s).
-  grunt.registerTask('default',  ['clean','stylus', 'concat', 'wrap', 'jshint', 'uglify', 'qunit']);
+  grunt.registerTask('default',  ['clean','stylus', 'concat', 'wrap', 'jshint', 'uglify', 'connect', 'qunit']);
   grunt.registerTask('dev',  ['clean','stylus', 'concat', 'wrap', 'jshint', 'uglify', 'watch']);
+  grunt.registerTask('test', ['connect', 'qunit']);
 };
