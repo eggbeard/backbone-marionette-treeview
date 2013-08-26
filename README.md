@@ -19,8 +19,8 @@ Nice tree view built on top of Backbone &amp; Backbone Marionette. Optimized for
 
   <pre>
     var trees = new Trees([
-      new Tree({ label: "test1", id: "1"}), 
-      new Tree({ label: "test2", id: "2"}), 
+      new Tree({ label: "test1", id: "1"}),
+      new Tree({ label: "test2", id: "2"}),
       new Tree({ label: "test3", id: "3"})
     ]);
   </pre>
@@ -28,45 +28,44 @@ Nice tree view built on top of Backbone &amp; Backbone Marionette. Optimized for
 2. Create your TreeView
 
   <pre>var treeView = new TreeView({ collection: trees });</pre>
-  
+
 3. Render where you want!
 
   <pre>$("...").html(treeView.render().el)</pre>
-  
-  
+
+
 ## Recursive
 If you want a recursive structure, add a Trees collection as a "children" field on your Tree model:
 
 <pre>var trees = new Trees([
-  new Tree({ label: "test1", id: "1"}), 
-  new Tree({ label: "test2", id: "2"}), 
+  new Tree({ label: "test1", id: "1"}),
+  new Tree({ label: "test2", id: "2"}),
   new Tree({ label: "test3", id: "3"})
 ]);</pre>
-  
+
 <pre>var rootNode = new Tree({ label: "rootNode", id: "10", children: trees });</pre>
-  
+
 ## Checkbox
 By default, you have a checkbox for each node. To indicate that the node is checked or unchecked, use the `isChecked` attribute:
 
 <pre>var node = new Tree({ label: "node", id: "1", isChecked: true }); // Default: isChecked = false</pre>
 
 ## Checkbox Events
-When a checkbox becomes checked or unchecked, a "checked" event is triggered on your `TreeView` collection. 
+When a checkbox becomes checked or unchecked, a "checked" event is triggered on your `TreeView` collection.
 
 <pre>trees.on("checked", method, context)</pre>
 
 If you want to capture all checkbox changes, you should bind to your collection's "change:isChecked" event.
 
 ## Build & Run
-In order to run the tests, you need to run them on a web server. If you have Python installed, you can type the 
-following command in the project folder.
-<pre>python -m SimpleHTTPServer</pre>
-
-You now have access to a web server on localhost:8000 and can run the `build` and `test` grunt commands:
+First, make sure you have grunt and all the dependencies installed:
 <pre>
 sudo npm install -g grunt-cli
 sudo npm install -g
-grunt</pre>
+grunt
+</pre>
+
+To run the tests, simply open `/test/index.html` in your browser, or use the `grunt test` command.
 
 ## More
 Read the source code and tests for more details.
