@@ -37,7 +37,7 @@ var Tree = Backbone.Tree = Backbone.Model.extend({
   },
 
   getChildrenIds: function() {
-    if (!this.hasChildren()) return [this.id];
+    if (!this.hasChildren()) return [];
 
     var modelsId = this.get("children").map(function(child) {
       if (child.hasChildren())

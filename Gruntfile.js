@@ -1,6 +1,6 @@
 fs = require('fs');
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
@@ -64,7 +64,7 @@ module.exports = function(grunt) {
     uglify: {
       dev: {
         options: {
-          banner: '/* Copyright (C) ' + new Date().getFullYear() +' Acquisio Inc. - <%= pkg.name %> - v<%= pkg.version %>\n\n' + fs.readFileSync('LICENSE') + '\n*/\n',
+          banner: '/* Copyright (C) ' + new Date().getFullYear() + ' Acquisio Inc. - <%= pkg.name %> - v<%= pkg.version %>\n\n' + fs.readFileSync('LICENSE') + '\n*/\n',
           compress: true
         },
         files: {
@@ -78,16 +78,16 @@ module.exports = function(grunt) {
         options: {
           '-W032': true,
           validthis: true,
-          laxcomma : true,
-          laxbreak : true,
-          browser  : true,
-          eqnull   : true,
-          debug    : true,
-          devel    : true,
-          boss     : true,
-          expr     : true,
-          asi      : true,
-          multistr : true
+          laxcomma: true,
+          laxbreak: true,
+          browser: true,
+          eqnull: true,
+          debug: true,
+          devel: true,
+          boss: true,
+          expr: true,
+          asi: true,
+          multistr: true
         },
         src: ['Gruntfile.js', 'bin/js/backbone-marionette-treeview.js']
       }
@@ -121,7 +121,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
 
   // Default task(s).
-  grunt.registerTask('default',  ['clean','stylus', 'concat', 'wrap', 'jshint', 'uglify', 'connect', 'qunit']);
-  grunt.registerTask('dev',  ['clean','stylus', 'concat', 'wrap', 'jshint', 'uglify', 'watch']);
+  grunt.registerTask('default', ['clean', 'stylus', 'concat', 'wrap', 'jshint', 'uglify', 'connect', 'qunit']);
+  grunt.registerTask('dev', ['clean', 'stylus', 'concat', 'wrap', 'jshint', 'uglify', 'watch']);
   grunt.registerTask('test', ['connect', 'qunit']);
 };
