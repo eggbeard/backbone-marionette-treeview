@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Backbone Marionette Tree View</title>
+
+    <script src="lib/jquery.js"></script>
+    <script src="lib/underscore.js"></script>
+    <script src="lib/backbone.js"></script>
+    <script src="lib/marionette.js"></script>
+
+    <script src="../js/models/tree-models.js"></script>
+    <script src="../js/views/node-view.js"></script>
+    <script src="../js/views/tree-view.js"></script>
+</head>
+<body>
+
+<div id="tree">
+
+</div>
+
+<script>
+    (function () {
+        var trees = buildTree([
+            {label: 'root', id: 0, leaves: [
+                {label: 'leaf 1', id: 1},
+                {label: 'leaf 2', id: 2},
+                {label: 'leaf 3', id: 3}
+            ]}
+        ]);
+
+        var treeView = new TreeView({ collection: trees });
+        $('#tree').append(treeView.render().el);
+
+        trees.models[0].toggleCheck();
+
+        function buildTree(data) {
+            var trees = new Trees();
+            _.each(data, function (item) {
+                var root = new Tree({ label: " " + item.label, id: item.id });
+                _.each(item.leaves, function (leaf) {
+                    root.get('children').add(new Tree({ label: leaf.label, id: leaf.id}));
+                });
+                trees.add(root);
+            });
+            return trees;
+        }
+    })();
+</script>
+
+</body>
+</html>

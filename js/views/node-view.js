@@ -12,14 +12,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 var templateNode = _.template('\
   <a>\
     <%=(hasChildren ? "<span class=tree-view-chevron>&#9658</span>" : "")%>\
-    <input id="<%=autoId%>"type="checkbox" <%=(isChecked ? "checked" : "")%> class="tree-view-checkbox" data-id="<%=id%>"/>\
+    <input id="<%=autoId%>" type="checkbox" <%=(isChecked ? "checked" : "")%> class="tree-view-checkbox" data-id="<%=id%>"/>\
     <label for="<%=autoId%>" class="tree-view-label"><span class="tree-view-icon"></span><%=label%></label>\
   </a>\
   <ul class="tree-view-list">\
   </ul>\
   ');
 
-var NodeView = Marionette.NodeView = Marionette.CompositeView.extend({
+NodeView = Marionette.CompositeView.extend({
   tagName: "li",
   className: "tree-view-node",
   template: templateNode,
@@ -84,14 +84,15 @@ var NodeView = Marionette.NodeView = Marionette.CompositeView.extend({
   },
 
   toggleMyself: function() {
+    console.log('toggleMyself');
     if (!this.model.hasChildren()) return this.ui.checkbox.prop("checked", this.model.get("isChecked"));
 
     if (this.model.areLeavesAllChecked()) {
-      this.ui.checkbox.prop("checked", true);
-      this.ui.checkbox.prop("indeterminate", false);
+      this.model.check();
     } else if (this.model.countLeavesChecked() > 0 && this.model.hasChildren()) {
       this.ui.checkbox.prop("indeterminate", true);
     } else {
+      this.model.set('isChecked', false);
       this.ui.checkbox.prop("checked", false);
       this.ui.checkbox.prop("indeterminate", false);
     }
@@ -121,7 +122,9 @@ var NodeView = Marionette.NodeView = Marionette.CompositeView.extend({
   },
 
   onCheck: function(event) {
+    console.log('ON CHECK BY CLICK');
     this.model.toggleCheck();
+    console.log('ITEMS', this.model.collection);
     this.model.collection.trigger("checked");
     event.stopPropagation();
   },

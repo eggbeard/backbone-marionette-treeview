@@ -1,16 +1,58 @@
 /*
 
-Copyright (C) 2013 Acquisio Inc. V0.1.1
+ Copyright (C) 2013 Acquisio Inc. V0.1.1
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-*/
+ */
 
-var Tree = Backbone.Tree = Backbone.Model.extend({
+Trees = Backbone.Collection.extend({
+
+  getLeavesChecked: function() {
+    var modelsChecked = this.map(function(model) {
+      return model.getLeavesChecked();
+    }, this);
+    return _.flatten(modelsChecked);
+  },
+
+  getChildrenIds: function() {
+    var modelsId = this.map(function(model) {
+      return model.getChildrenIds();
+    }, this);
+    return _.flatten(modelsId);
+  },
+
+  countLeavesChecked: function() {
+    return this.getLeavesChecked().length;
+  },
+
+  checkFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, true);
+  },
+
+  uncheckFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, false);
+  },
+
+  uncheckAll: function() {
+    this.each(function(child) { child.uncheck(); });
+  },
+
+  checkAll: function() {
+    this.each(function(child) { child.check(); });
+  },
+
+  _setIsCheckedFromIds: function(ids, isChecked) {
+    this.each(function(child) { child._setIsCheckedFromIds(ids, isChecked); });
+  }
+
+});
+
+Tree = Backbone.Model.extend({
   defaults: {
     id: 0,
     label: "Default",
@@ -18,7 +60,7 @@ var Tree = Backbone.Tree = Backbone.Model.extend({
   },
 
   initialize: function() {
-    if (!this.get("children")) this.set("children", new Backbone.Trees());
+    if (!this.get("children")) this.set("children", new Trees());
   },
 
   toggleCheckFromIds: function(ids) {
@@ -110,6 +152,7 @@ var Tree = Backbone.Tree = Backbone.Model.extend({
 
   _setIsChecked: function(isChecked) {
     this.set("isChecked", isChecked);
+    console.log('IS CHECKED', isChecked);
     this.get("children").each(function(child) { child._setIsChecked(isChecked); });
   },
 
@@ -122,36 +165,4 @@ var Tree = Backbone.Tree = Backbone.Model.extend({
 
 });
 
-var Trees = Backbone.Trees = Backbone.Collection.extend({
-  model: Tree,
-
-  getLeavesChecked: function() {
-    var modelsChecked = this.map(function(model) {
-      return model.getLeavesChecked();
-    }, this);
-    return _.flatten(modelsChecked);
-  },
-
-  getChildrenIds: function() {
-    var modelsId = this.map(function(model) {
-      return model.getChildrenIds();
-    }, this);
-    return _.flatten(modelsId);
-  },
-
-  countLeavesChecked: function() {
-    return this.getLeavesChecked().length;
-  },
-
-  checkFromIds: function(ids) {
-    this._setIsCheckedFromIds(ids, true);
-  },
-
-  uncheckFromIds: function(ids) {
-    this._setIsCheckedFromIds(ids, false);
-  },
-
-  _setIsCheckedFromIds: function(ids, isChecked) {
-    this.each(function(child) { child._setIsCheckedFromIds(ids, isChecked); });
-  }
-});
+Trees.model = Tree;

@@ -2,17 +2,59 @@
 
 /*
 
-Copyright (C) 2013 Acquisio Inc. V0.1.1
+ Copyright (C) 2013 Acquisio Inc. V0.1.1
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-*/
+ */
 
-var Tree = Backbone.Tree = Backbone.Model.extend({
+Trees = Backbone.Collection.extend({
+
+  getLeavesChecked: function() {
+    var modelsChecked = this.map(function(model) {
+      return model.getLeavesChecked();
+    }, this);
+    return _.flatten(modelsChecked);
+  },
+
+  getChildrenIds: function() {
+    var modelsId = this.map(function(model) {
+      return model.getChildrenIds();
+    }, this);
+    return _.flatten(modelsId);
+  },
+
+  countLeavesChecked: function() {
+    return this.getLeavesChecked().length;
+  },
+
+  checkFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, true);
+  },
+
+  uncheckFromIds: function(ids) {
+    this._setIsCheckedFromIds(ids, false);
+  },
+
+  uncheckAll: function() {
+    this.each(function(child) { child.uncheck(); });
+  },
+
+  checkAll: function() {
+    this.each(function(child) { child.check(); });
+  },
+
+  _setIsCheckedFromIds: function(ids, isChecked) {
+    this.each(function(child) { child._setIsCheckedFromIds(ids, isChecked); });
+  }
+
+});
+
+Tree = Backbone.Model.extend({
   defaults: {
     id: 0,
     label: "Default",
@@ -20,7 +62,7 @@ var Tree = Backbone.Tree = Backbone.Model.extend({
   },
 
   initialize: function() {
-    if (!this.get("children")) this.set("children", new Backbone.Trees());
+    if (!this.get("children")) this.set("children", new Trees());
   },
 
   toggleCheckFromIds: function(ids) {
@@ -112,6 +154,7 @@ var Tree = Backbone.Tree = Backbone.Model.extend({
 
   _setIsChecked: function(isChecked) {
     this.set("isChecked", isChecked);
+    console.log('IS CHECKED', isChecked);
     this.get("children").each(function(child) { child._setIsChecked(isChecked); });
   },
 
@@ -124,39 +167,7 @@ var Tree = Backbone.Tree = Backbone.Model.extend({
 
 });
 
-var Trees = Backbone.Trees = Backbone.Collection.extend({
-  model: Tree,
-
-  getLeavesChecked: function() {
-    var modelsChecked = this.map(function(model) {
-      return model.getLeavesChecked();
-    }, this);
-    return _.flatten(modelsChecked);
-  },
-
-  getChildrenIds: function() {
-    var modelsId = this.map(function(model) {
-      return model.getChildrenIds();
-    }, this);
-    return _.flatten(modelsId);
-  },
-
-  countLeavesChecked: function() {
-    return this.getLeavesChecked().length;
-  },
-
-  checkFromIds: function(ids) {
-    this._setIsCheckedFromIds(ids, true);
-  },
-
-  uncheckFromIds: function(ids) {
-    this._setIsCheckedFromIds(ids, false);
-  },
-
-  _setIsCheckedFromIds: function(ids, isChecked) {
-    this.each(function(child) { child._setIsCheckedFromIds(ids, isChecked); });
-  }
-});
+Trees.model = Tree;
 /*
 
 Copyright (C) 2013 Acquisio Inc. V0.1.1
@@ -171,14 +182,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 var templateNode = _.template('\
   <a>\
     <%=(hasChildren ? "<span class=tree-view-chevron>&#9658</span>" : "")%>\
-    <input id="<%=autoId%>"type="checkbox" <%=(isChecked ? "checked" : "")%> class="tree-view-checkbox" data-id="<%=id%>"/>\
+    <input id="<%=autoId%>" type="checkbox" <%=(isChecked ? "checked" : "")%> class="tree-view-checkbox" data-id="<%=id%>"/>\
     <label for="<%=autoId%>" class="tree-view-label"><span class="tree-view-icon"></span><%=label%></label>\
   </a>\
   <ul class="tree-view-list">\
   </ul>\
   ');
 
-var NodeView = Marionette.NodeView = Marionette.CompositeView.extend({
+NodeView = Marionette.CompositeView.extend({
   tagName: "li",
   className: "tree-view-node",
   template: templateNode,
@@ -243,14 +254,15 @@ var NodeView = Marionette.NodeView = Marionette.CompositeView.extend({
   },
 
   toggleMyself: function() {
+    console.log('toggleMyself');
     if (!this.model.hasChildren()) return this.ui.checkbox.prop("checked", this.model.get("isChecked"));
 
     if (this.model.areLeavesAllChecked()) {
-      this.ui.checkbox.prop("checked", true);
-      this.ui.checkbox.prop("indeterminate", false);
+      this.model.check();
     } else if (this.model.countLeavesChecked() > 0 && this.model.hasChildren()) {
       this.ui.checkbox.prop("indeterminate", true);
     } else {
+      this.model.set('isChecked', false);
       this.ui.checkbox.prop("checked", false);
       this.ui.checkbox.prop("indeterminate", false);
     }
@@ -280,7 +292,9 @@ var NodeView = Marionette.NodeView = Marionette.CompositeView.extend({
   },
 
   onCheck: function(event) {
+    console.log('ON CHECK BY CLICK');
     this.model.toggleCheck();
+    console.log('ITEMS', this.model.collection);
     this.model.collection.trigger("checked");
     event.stopPropagation();
   },
@@ -311,7 +325,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 */
 
-var TreeView = Marionette.TreeView = Marionette.CollectionView.extend({
+TreeView = Marionette.CollectionView.extend({
   itemView: NodeView,
   tagName: "ul",
   className: "tree-view-root",
@@ -322,16 +336,8 @@ var TreeView = Marionette.TreeView = Marionette.CollectionView.extend({
     };
   },
 
-  expand: function() {
-    this.children.invoke('expand');
-  },
-
-  collapse: function() {
-    this.children.invoke('collapse');
-  },
-
-  toggleView: function() {
-    this.children.invoke('toggleView');
-  }
+  expand: function() { this.children.each(function(child) { child.expand(); }); },
+  collapse: function() { this.children.each(function(child) { child.collapse(); }); },
+  toggleView: function() { this.children.each(function(child) { child.toggleView(); }); }
 });
 })(this.Backbone, this.Marionette, this._, this.jQuery);

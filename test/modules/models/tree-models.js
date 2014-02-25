@@ -1,5 +1,5 @@
-var Tree = Backbone.Tree,
-  Trees = Backbone.Trees;
+//var Tree = Backbone.Tree,
+//  Trees = Backbone.Trees;
 
 // ---------------------------
 // Tree without children
@@ -251,7 +251,6 @@ test("getChildrenIds when model has children", function() {
 //
 //  equal(tree.get("isChecked"), false, "Root is unchecked");
 //});
-
 
 // ---------------------------
 // Filled Trees

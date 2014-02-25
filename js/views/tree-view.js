@@ -10,7 +10,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 */
 
-var TreeView = Marionette.TreeView = Marionette.CollectionView.extend({
+TreeView = Marionette.CollectionView.extend({
   itemView: NodeView,
   tagName: "ul",
   className: "tree-view-root",
@@ -21,15 +21,7 @@ var TreeView = Marionette.TreeView = Marionette.CollectionView.extend({
     };
   },
 
-  expand: function() {
-    this.children.invoke('expand');
-  },
-
-  collapse: function() {
-    this.children.invoke('collapse');
-  },
-
-  toggleView: function() {
-    this.children.invoke('toggleView');
-  }
+  expand: function() { this.children.each(function(child) { child.expand(); }); },
+  collapse: function() { this.children.each(function(child) { child.collapse(); }); },
+  toggleView: function() { this.children.each(function(child) { child.toggleView(); }); }
 });
