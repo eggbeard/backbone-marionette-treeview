@@ -152,7 +152,6 @@ Tree = Backbone.Model.extend({
 
   _setIsChecked: function(isChecked) {
     this.set("isChecked", isChecked);
-    console.log('IS CHECKED', isChecked);
     this.get("children").each(function(child) { child._setIsChecked(isChecked); });
   },
 

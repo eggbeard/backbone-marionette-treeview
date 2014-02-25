@@ -84,7 +84,6 @@ NodeView = Marionette.CompositeView.extend({
   },
 
   toggleMyself: function() {
-    console.log('toggleMyself');
     if (!this.model.hasChildren()) return this.ui.checkbox.prop("checked", this.model.get("isChecked"));
 
     if (this.model.areLeavesAllChecked()) {
@@ -122,9 +121,7 @@ NodeView = Marionette.CompositeView.extend({
   },
 
   onCheck: function(event) {
-    console.log('ON CHECK BY CLICK');
     this.model.toggleCheck();
-    console.log('ITEMS', this.model.collection);
     this.model.collection.trigger("checked");
     event.stopPropagation();
   },
