@@ -215,12 +215,7 @@ NodeView = Marionette.CompositeView.extend({
   bindCollection: function() {
     this.collection = this.model.get("children");
     this.collection.off("checked");
-    this.collection.on("checked", this.triggerChange, this);
     this.collection.on("checked", this.toggleMyself, this);
-  },
-
-  triggerChange: function() {
-    this.model.trigger("checked");
   },
 
   onRender: function() {
@@ -253,7 +248,10 @@ NodeView = Marionette.CompositeView.extend({
   },
 
   toggleMyself: function() {
-    if (!this.model.hasChildren()) return this.ui.checkbox.prop("checked", this.model.get("isChecked"));
+    if (!this.model.hasChildren()) {
+      this.ui.checkbox.prop("checked", this.model.get("isChecked"));
+      return;
+    }
 
     if (this.model.areLeavesAllChecked()) {
       this.model.check();
@@ -289,10 +287,10 @@ NodeView = Marionette.CompositeView.extend({
     }
   },
 
-  onCheck: function(event) {
+  onCheck: function(e) {
+    e.stopPropagation();
     this.model.toggleCheck();
     this.model.collection.trigger("checked");
-    event.stopPropagation();
   },
 
   expand: function() {
@@ -336,4 +334,4 @@ TreeView = Marionette.CollectionView.extend({
   collapse: function() { this.children.each(function(child) { child.collapse(); }); },
   toggleView: function() { this.children.each(function(child) { child.toggleView(); }); }
 });
-})(this.Backbone, this.Marionette, this._, this.jQuery);
+})(Backbone, Marionette, _, jQuery);
