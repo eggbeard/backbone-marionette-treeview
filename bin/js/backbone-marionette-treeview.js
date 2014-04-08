@@ -215,7 +215,12 @@ NodeView = Marionette.CompositeView.extend({
   bindCollection: function() {
     this.collection = this.model.get("children");
     this.collection.off("checked");
+    this.collection.on("checked", this.triggerChange, this);
     this.collection.on("checked", this.toggleMyself, this);
+  },
+
+  triggerChange: function() {
+    this.model.trigger("checked");
   },
 
   onRender: function() {
